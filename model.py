@@ -59,7 +59,8 @@ class SentimentRecommenderModel:
             # transfor the input data using saved tf-idf vectorizer
             X = self.vectorizer.transform(
                 filtered_data["reviews_text_cleaned"].values.astype(str))
-            filtered_data["predicted_sentiment"] = self.model.predict(X)
+            dtest = xgb.DMatrix(X)
+            filtered_data["predicted_sentiment"] = self.model.predict(dtest)
             temp = filtered_data[['id', 'predicted_sentiment']]
             temp_grouped = temp.groupby('id', as_index=False).count()
             temp_grouped["pos_review_count"] = temp_grouped.id.apply(lambda x: temp[(
